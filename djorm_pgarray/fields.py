@@ -6,7 +6,6 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
-from django.utils import six
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 
@@ -37,7 +36,7 @@ def _cast_to_type(data, type_cast):
 
 
 def _unserialize(value):
-    if not isinstance(value, six.string_types):
+    if not isinstance(value, basestring):
         return _cast_to_unicode(value)
 
     try:
@@ -75,7 +74,7 @@ class ArrayField(models.Field):
 
     def get_db_prep_value(self, value, connection, prepared=False):
         value = value if prepared else self.get_prep_value(value)
-        if not value or isinstance(value, six.string_types):
+        if not value or isinstance(value, basestring):
             return value
         return _cast_to_type(value, self._type_cast)
 
